@@ -355,4 +355,17 @@ describe('Observer', () => {
       expect(obj.__ob__ instanceof Observer).toBe(true)
     })
   })
+
+  it('calls sub-classed array original mutator', () => {
+    const arr = []
+    arr.__proto__ = Object.create(arr.__proto__) // eslint-disable-line
+    arr.__proto__.push = function () { // eslint-disable-line
+      return Array.prototype.push.apply(this, arguments)
+    }
+    spyOn(arr, 'push')
+    observe(arr)
+    arr.push(1)
+    arr.push(2)
+    expect(arr.push.calls.count()).toBe(2)
+  })
 })

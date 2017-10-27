@@ -2,7 +2,7 @@
 
 import Dep from './dep'
 import VNode from '../vdom/vnode'
-import { arrayMethods } from './array'
+import { arrayMethods, getArrayProtoFor } from './array'
 import {
   def,
   warn,
@@ -46,7 +46,7 @@ export class Observer {
       const augment = hasProto
         ? protoAugment
         : copyAugment
-      augment(value, arrayMethods, arrayKeys)
+      augment(value, getArrayProtoFor(value), arrayKeys)
       this.observeArray(value)
     } else {
       this.walk(value)
